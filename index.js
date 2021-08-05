@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const bot = new Discord.Client({
     partials: ["MESSAGE", "CHANNEL", "REACTION"]
 });
+const enmap = require('enmap');
 const {
     token
 } = require('./config.json');
@@ -12,6 +13,13 @@ const {
 const {
     join
 } = require('path');
+
+const settings = new enmap({
+    name: "settings",
+    autoFetch: true,
+    cloneLevel: "deep",
+    fetchAll: true
+});
 //------------------------------------------------------------------------------
 bot.commands = new Discord.Collection();
 //------------------------------------------------------------------------------
@@ -51,10 +59,10 @@ bot.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.partial) await reaction.fetch();
     if (user.bot) return;
     if (!reaction.message.guild) return;
-    if (reaction.message.id === '872443920376795167') {
+    if (reaction.message.id === '872633305722417212') {
         if (reaction.emoji.name === '✅') {
-            await reaction.message.guild.members.cache.get(user.id).roles.add('865807637945778216')
-            user.send('You have obtained a role!')
+            await reaction.message.guild.members.cache.get(user.id).roles.add('872633392468992010')
+            user.send('Verified Role has been given')
         }
     }
 })
@@ -63,13 +71,78 @@ bot.on('messageReactionRemove', async (reaction, user) => {
     if (reaction.partial) await reaction.fetch();
     if (user.bot) return;
     if (!reaction.message.guild) return;
-    if (reaction.message.id === '872443920376795167') {
+    if (reaction.message.id === '872633305722417212') {
         if (reaction.emoji.name === '✅') {
-            await reaction.message.guild.members.cache.get(user.id).roles.remove('865807637945778216')
-            user.send('One of your roles has been removed!')
+            await reaction.message.guild.members.cache.get(user.id).roles.remove('872633392468992010')
+            user.send('Verified Role has been removed')
         }
     }
 })
 //------------------------------------------------------------------------------------------------
+bot.on('message', async message => {
+    if (message.author.bot) return;
+    if (message.content.indexOf(prefix) !== 0) return;
+
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const command = args.shift().toLowerCase();
+
+    if (command == "ticket-setup") {
+        let channel = message.mentions.channels.first();
+        if (!channel) return message.reply("Usage: `aa.ticket-setup #channel`");
+
+        let sent = await channel.send(new Discord.MessageEmbed()
+            .setTitle("Admin Support")
+            .setDescription("React to get support from our staff.")
+            .setFooter("Ticket System")
+            .setColor("B20000")
+        );
+
+        sent.react('🎫');
+        settings.set(`${message.guild.id}-ticket`, sent.id);
+
+        message.channel.send("Ticket System Setup Done!")
+    }
+
+    if (command == "close") {
+        if (!message.channel.name.includes("ticket-")) return message.channel.send("You cannot use that here!")
+        message.channel.delete();
+    }
+});
+
+
+bot.on('messageReactionAdd', async (reaction, user) => {
+    if (user.partial) await user.fetch();
+    if (reaction.partial) await reaction.fetch();
+    if (reaction.message.partial) await reaction.message.fetch();
+    if (user.bot) return;
+    let ticketid = await settings.get(`${reaction.message.guild.id}-ticket`);
+    if (!ticketid) return;
+    if (reaction.message.id == ticketid && reaction.emoji.name == '🎫') {
+        reaction.users.remove(user);
+
+        reaction.message.guild.channels.create(`ticket-${user.username}`, {
+            permissionOverwrites: [{
+                    id: user.id,
+                    allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
+                },
+                {
+                    id: '872631825019854879',
+                    allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'MANAGE_MESSAGES', 'MANAGE_CHANNELS']
+                },
+                {
+                    id: reaction.message.guild.roles.everyone,
+                    deny: ["VIEW_CHANNEL"]
+                }
+            ],
+            type: 'text'
+        }).then(async channel => {
+            channel.send(`<@${user.id}>` + `<@&872631825019854879>`, new Discord.MessageEmbed().setTitle("Welcome to your ticket!").setDescription("Please follow the format in this ticket, Do not tag staff or anyone in this ticket. If it has been more than 24hr since the last reply from your ticket you may tag staff. You can use !close at any time to close the ticket." + "\n" + "\n" + "**Your steamID**:" + "\n" + "**Your In-game name**:" + "\n" + "**What you are making a ticket for**:" + "\n" + "\n" + "*If you do not follow format this ticket could be closed.*").setColor("B20000"))
+        })
+    }
+});
+
+
+
+
 
 bot.login(token);

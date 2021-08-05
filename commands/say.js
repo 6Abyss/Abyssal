@@ -11,7 +11,7 @@ module.exports = {
       }, 2500);
     });
     if (message.content.startsWith(prefix + 'say')) {
-      let rest_of_the_string = message.content.slice('.say'.length); //removes the first part
+      let rest_of_the_string = message.content.slice('aa.say'.length); //removes the first part
       let array_of_arguments = rest_of_the_string.split('; '); //[title, description, link, image]
       if (!message.guild) return;
       let embed = new Discord.MessageEmbed()
