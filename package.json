@@ -9,6 +9,7 @@
   "author": "Abyss",
   "license": "ISC",
   "dependencies": {
+    "discord-buttons": "^4.0.0",
     "discord.js": "^12.5.3",
     "discord.js-pagination": "^1.0.3",
     "enmap": "^5.8.7",

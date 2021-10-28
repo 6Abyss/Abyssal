@@ -14,14 +14,14 @@ module.exports = {
         const kickembed = new Discord.MessageEmbed()
             .setTitle(`You were kicked from **${message.guild.name}**`)
             .setDescription(`Reason: ${reason}`)
-            .setColor(0xFF0000)
+            .setColor(0xef5c50)
             .setTimestamp()
             .setFooter(bot.user.tag, bot.user.displayAvatarURL())
 
         const testembed = new Discord.MessageEmbed()
             .setTitle("Abyss Bot Moderation")
             .setDescription(`**${mentionMember}** has been kicked! **Reason**: ${reason}`)
-            .setColor(0xFF0000)
+            .setColor(0xef5c50)
 
         if (!args[0]) return message.channel.send("You need to specify a user to kick");
 

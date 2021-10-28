@@ -6,19 +6,16 @@ module.exports = {
   async run(bot, message, args) {
     const mentionMember = message.mentions.members.first();
     const testing = new Discord.MessageEmbed()
-      .setColor(0xFF0000)
-      .setDescription(`<@${mentionMember.id}> has been unmuted!`)
+      .setColor(0xef5c50)
+      .setDescription(`${mentionMember} has been unmuted!`)
     if (message.content.startsWith("aa.unmute")) {
       if (message.member.hasPermission("ADMINISTRATOR")) {
         let member = message.mentions.members.first();
         if (!member) message.channel.send("mention someone to unmute!");
         else {
-          member.roles.remove("872411910799233044");
+          member.roles.remove("872026223746895963");
           message.channel.send(testing);
-          message.channel.send({
-            embed
-          });
-        }
+          };
       } else {
         message.reply("You don't have permission to do that!");
       }

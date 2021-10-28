@@ -17,7 +17,7 @@ module.exports = {
       let embed = new Discord.MessageEmbed()
         .setAuthor(array_of_arguments[0])
         .setDescription(`${array_of_arguments[1]}`)
-        .setColor(0xFF0000)
+        .setColor(0xef5c50)
         .setTimestamp()
 
       message.delete();

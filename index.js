@@ -20,6 +20,9 @@ const settings = new enmap({
     cloneLevel: "deep",
     fetchAll: true
 });
+const disbut = require('discord-buttons')(bot);
+
+const { MessageButton, MessageActionRow } = require('discord-buttons')
 //------------------------------------------------------------------------------
 bot.commands = new Discord.Collection();
 //------------------------------------------------------------------------------
@@ -58,10 +61,11 @@ bot.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.message.partial) await reaction.message.fetch();
     if (reaction.partial) await reaction.fetch();
     if (user.bot) return;
+    reaction.message.react('✅')
     if (!reaction.message.guild) return;
-    if (reaction.message.id === '872633305722417212') {
+    if (reaction.message.id === '879031620303200257') {
         if (reaction.emoji.name === '✅') {
-            await reaction.message.guild.members.cache.get(user.id).roles.add('872633392468992010')
+            await reaction.message.guild.members.cache.get(user.id).roles.add('798688954240466964')
             user.send('Verified Role has been given')
         }
     }
@@ -71,9 +75,10 @@ bot.on('messageReactionRemove', async (reaction, user) => {
     if (reaction.partial) await reaction.fetch();
     if (user.bot) return;
     if (!reaction.message.guild) return;
-    if (reaction.message.id === '872633305722417212') {
+    reaction.message.react('✅')
+    if (reaction.message.id === '879031620303200257') {
         if (reaction.emoji.name === '✅') {
-            await reaction.message.guild.members.cache.get(user.id).roles.remove('872633392468992010')
+            await reaction.message.guild.members.cache.get(user.id).roles.remove('798688954240466964')
             user.send('Verified Role has been removed')
         }
     }
@@ -91,10 +96,10 @@ bot.on('message', async message => {
         if (!channel) return message.reply("Usage: `aa.ticket-setup #channel`");
 
         let sent = await channel.send(new Discord.MessageEmbed()
-            .setTitle("Admin Support")
-            .setDescription("React to get support from our staff.")
-            .setFooter("Ticket System")
-            .setColor("B20000")
+            .setTitle("Support Ticket")
+            .setDescription("React to speak to staff!")
+            .setFooter("Abyssal.cc")
+            .setColor("ef5c50")
         );
 
         sent.react('🎫');
@@ -126,7 +131,7 @@ bot.on('messageReactionAdd', async (reaction, user) => {
                     allow: ["SEND_MESSAGES", "VIEW_CHANNEL"]
                 },
                 {
-                    id: '872631825019854879',
+                    id: '798691322704953385',
                     allow: ['SEND_MESSAGES', 'VIEW_CHANNEL', 'MANAGE_MESSAGES', 'MANAGE_CHANNELS']
                 },
                 {
@@ -136,11 +141,11 @@ bot.on('messageReactionAdd', async (reaction, user) => {
             ],
             type: 'text'
         }).then(async channel => {
-            channel.send(`<@${user.id}>` + `<@&872631825019854879>`, new Discord.MessageEmbed().setTitle("Welcome to your ticket!").setDescription("Please follow the format in this ticket, Do not tag staff or anyone in this ticket. If it has been more than 24hr since the last reply from your ticket you may tag staff. You can use !close at any time to close the ticket." + "\n" + "\n" + "**Your steamID**:" + "\n" + "**Your In-game name**:" + "\n" + "**What you are making a ticket for**:" + "\n" + "\n" + "*If you do not follow format this ticket could be closed.*").setColor("B20000"))
-        })
-    }
+            channel.send(`<@${user.id}>` + `<@&798691322704953385>`, new Discord.MessageEmbed().setTitle("Welcome to your ticket!").setDescription("Please follow the format in this ticket, Do not tag staff or anyone in this ticket. If it has been more than 24hr since the last reply from your ticket you may tag staff. You can use aa.close at any time to close the ticket." + "\n" + "\n" + "**Your Order-ID**:" + "\n" + "**What you are making a ticket for**:" + "\n" + "\n" + "*If you do not follow format this ticket could be closed. If not please specify what this ticket is being made for!*").setColor("ef5c50"))
+console.log();
 });
-
+    }
+})
 
 
 
